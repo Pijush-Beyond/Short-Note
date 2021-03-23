@@ -3,10 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Provider} from 'react-redux'
+import Store from './Helper/Store';
+import { createMuiTheme } from '@material-ui/core';
+import { ThemeProvider  } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({})
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store = {Store}>
+      <ThemeProvider theme={theme}>
+        <App/>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
