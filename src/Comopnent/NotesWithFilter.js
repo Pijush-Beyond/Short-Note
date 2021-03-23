@@ -57,7 +57,7 @@ export default function NotesWithFilter() {
     handleNotes(date);
   }
   const handleFliterCloseWithWeek = e => {
-    const d = new Date(new Date(e.currentTarget.value.split('-')[0]).getTime() + (parseInt(e.currentTarget.value.split('-')[1].slice(1))-1) * 7 * 24 * 60 * 60 * 1000);
+    const d = new Date(new Date(e.currentTarget.value.split('-')[0]).getTime() + parseInt(e.currentTarget.value.split('-')[1].slice(1))* 7 * 24 * 60 * 60 * 1000);
     // const d = new Date(sDate);
     var day = d.getDay(),
         diff = d.getDate() - day + (day === 0 ? -6:1); // adjust when day is sunday
@@ -71,7 +71,7 @@ export default function NotesWithFilter() {
   }
   const handleFliterCloseWithDate = e => {
     setFilters({ year: '1', month: '', week: '', date: e.currentTarget.value,clear:false })
-    const date = { startDate: new Date(`${e.currentTarget.value}`).getTime(), endDate: new Date(new Date(e.currentTarget.value).getTime() + 24 * 60 * 60 * 1000).getTime() }
+    const date = { startDate: new Date(`${e.currentTarget.value} `).getTime(), endDate: new Date(new Date(`${e.currentTarget.value} `).getTime() + 24 * 60 * 60 * 1000).getTime() }
     setFilterDate(date);
     handleFliterClose();
     handleNotes(date);
@@ -92,7 +92,7 @@ export default function NotesWithFilter() {
 
   const handleNotes = (date, search) => {
     const localnotes = [...notes];
-    const regex = new RegExp(`(${keyWords.join('|')})`, 'ig');
+    const regex = new RegExp(`(${keyWords.join('\\s+|\\s+')})`, 'ig');
     if (reverse) localnotes.reverse();
     let newNotes;
     if (regexCountKeeper || search) {

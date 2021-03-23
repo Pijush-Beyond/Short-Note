@@ -97,9 +97,14 @@ export default function Notes({ createDate, title, description, editFlag, parent
     parentSetFunc(false);
   }
 
+  const formatDate = (date) => {
+    const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    return `${date.getDate()} ${month[date.getMonth()]}, ${date.getFullYear()}`
+  }
+
   if(edit)return (
     <form className={classes.root} onSubmit={e => { e.preventDefault(); handleSubmit()}}>
-      <Typography component="span" className={classes.span}>{createDate?new Date(createDate).toLocaleDateString():new Date().toLocaleDateString()}</Typography>
+      <Typography component="span" className={classes.span}>{formatDate(createDate ? new Date(createDate) : new Date())}</Typography>
       <TitleInput inputProps={{ placeholder: 'Title' }} fullWidth={true} value={stateTitle} onChange={e => setStateTitle(e.currentTarget.value) }/>
       <DescriptionInput multiline={true} inputProps={{ placeholder: 'Describe...' }} fullWidth={true} value={stateDescription} onChange={e => setStateDescription(e.currentTarget.value)}/>
       <div className="button-group">
@@ -111,7 +116,7 @@ export default function Notes({ createDate, title, description, editFlag, parent
   else return(
     <div className={`${fullView ? classes.fullview : ''} ${classes.root}`}>
       <NoteMenu edit={setEdit} createDate={createDate} parentSetFunc={parentSetFunc} setFullView={setFullView} fullView={fullView} name={name}/>
-      <Typography component="span" className={classes.span}>{createDate?new Date(createDate).toLocaleDateString():new Date().toLocaleDateString()}</Typography>
+      <Typography component="span" className={classes.span}>{formatDate(createDate?new Date(createDate):new Date())}</Typography>
       <Typography variant="h6">{stateTitle }</Typography>
       <Typography variant="body1" component="p">{stateDescription}</Typography>
     </div>

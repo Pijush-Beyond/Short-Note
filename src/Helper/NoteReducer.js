@@ -31,11 +31,11 @@ const reducer = createSlice({
     getNotes: (state,action) => {
       if (action.payload === 'Guest') {
         const notes = [];
-        for (let i = 0; i < 50; i++)
+        for (let i = 0; i < 100; i++)
           notes.push({
-            createDate: new Date().getTime() - i * 3 * 24 * 60 * 60 * 1000,
-            title: `This is a title for note created on ${new Date(new Date().getTime() - i * 3 * 24 * 60 * 60 * 1000).toLocaleDateString()}`,
-            description: `This is is huge description for note created on ${new Date(new Date().getTime() - i * 3 * 24 * 60 * 60 * 1000).toLocaleDateString()} and this really good attempt`
+            createDate: new Date().getTime() - i * 6 * 24 * 60 * 60 * 1000,
+            title: `This is a title for note created on ${formatDate(new Date(new Date().getTime() - i * 6 * 24 * 60 * 60 * 1000))}`,
+            description: `This is is huge description for note created on ${formatDate(new Date(new Date().getTime() - i * 6 * 24 * 60 * 60 * 1000))} and this really good attempt`
           })
         localStorage.setItem(`${action.payload}-notes`, JSON.stringify(notes));
         return notes
@@ -43,6 +43,11 @@ const reducer = createSlice({
     }
   }
 })
+
+const formatDate = (date) => {
+  const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  return `${date.getDate()} ${month[date.getMonth()]}, ${date.getFullYear()}`
+}
 
 export const { newNote, deleteNote, editNote, getNotes } = reducer.actions;
 export default reducer.reducer;
