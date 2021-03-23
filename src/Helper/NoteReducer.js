@@ -31,10 +31,10 @@ const reducer = createSlice({
     getNotes: (state,action) => {
       if (action.payload === 'Guest') {
         const notes = [];
-        for (let i = 0; i < 10; i++)
+        for (let i = 0; i < 50; i++)
           notes.push({
             createDate: new Date().getTime() - i * 3 * 24 * 60 * 60 * 1000,
-            title: `This is a title for note ${new Date(new Date().getTime() - i * 3 * 24 * 60 * 60 * 1000).toLocaleDateString}`,
+            title: `This is a title for note created on ${new Date(new Date().getTime() - i * 3 * 24 * 60 * 60 * 1000).toLocaleDateString()}`,
             description: `This is is huge description for note created on ${new Date(new Date().getTime() - i * 3 * 24 * 60 * 60 * 1000).toLocaleDateString()} and this really good attempt`
           })
         localStorage.setItem(`${action.payload}-notes`, JSON.stringify(notes));
