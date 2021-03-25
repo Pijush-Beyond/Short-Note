@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Button, MenuItem, Menu } from '@material-ui/core';
+import {  Button, MenuItem, Menu, useMediaQuery } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { deleteNote } from '../Helper/NoteReducer';
 import { useDispatch } from 'react-redux';
@@ -20,14 +20,15 @@ const MenuButton = withStyles(theme=>({
   }
 }))(Button)
 
-export default function NoteMenu({ edit, createDate, parentSetFunc,fullView, setFullView, name}) {
+export default function NoteMenu({ edit, id, parentSetFunc,fullView, setFullView, name}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleFliterOpen = (event) =>setAnchorEl(event.currentTarget);
   const handleFliterClose = ()=>setAnchorEl(null);
 
   const dispatch = useDispatch()
 
-  const handleDelete = ()=> dispatch(deleteNote({name,createDate}));
+  const handleDelete = ()=> dispatch(deleteNote({name,id}));
+  const matches = useMediaQuery(theme => theme.breakpoints.down('xs'));
   
   return (
     <>
@@ -45,9 +46,9 @@ export default function NoteMenu({ edit, createDate, parentSetFunc,fullView, set
         <MenuItem component="form" onClick={handleDelete}>
           delete
         </MenuItem >
-        <MenuItem component="form" onClick={() => { parentSetFunc(!fullView); setFullView(!fullView); handleFliterClose()}}>
+        {!matches && <MenuItem component="form" onClick={() => { parentSetFunc(!fullView); setFullView(!fullView); handleFliterClose()}}>
           {fullView?'close':'view'}
-        </MenuItem >
+        </MenuItem >}
       </Menu>
     </>
   )

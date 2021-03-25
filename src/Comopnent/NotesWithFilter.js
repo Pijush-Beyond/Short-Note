@@ -25,10 +25,10 @@ const MenuItemCust = withStyles(theme => ({
 export default function NotesWithFilter() {
   const classes = useStyle();
   const dispatch = useDispatch();
-  const notes = useSelector(state => state.notes);
+  const notes = useSelector(state =>  state.notes);
   const keyWords = useSelector(state => state.keyWords);
   const name = useSelector(state => state.name);
-  // console.log(name);
+  // console.log(notes);
 
   const [nameKeeper, setNameKeeper] = useState(name);
   const [regexCountKeeper, setRegexCountKeeper] = useState(keyWords.length);
@@ -96,17 +96,42 @@ export default function NotesWithFilter() {
     if (reverse) localnotes.reverse();
     let newNotes;
     if (regexCountKeeper || search) {
-      newNotes = localnotes.filter(n => n.createDate >= date.startDate && n.createDate <= date.endDate && ([...n.title.matchAll(regex)].length + [...n.title.matchAll(regex)].length) > 0);
+      newNotes = localnotes.filter(n => n.createDate >= date.startDate && n.createDate <= date.endDate && ([...n.title.matchAll(regex)].length + [...n.description.matchAll(regex)].length) > 0);
     }
     else newNotes = localnotes.filter(n => n.createDate >= date.startDate && n.createDate <= date.endDate);
     setFilteredNotes(newNotes);
   }
-  if (notes.length !== countKeeper){
-    setCountKeeper(notes.length);
+
+  const notesChecker = () => {
+    if (filteredNotes.length === 0) return true;
+    else if (!reverse) {
+      let i = 0;
+      for (let n of notes)
+        if (n.id === filteredNotes[i].id){
+          if (filteredNotes.length === i + 1)
+            return true;
+          else i++;
+        }
+      return notes.length === 0 && filteredNotes.length === 0 ? true : false;
+    } else {
+      let i =  filteredNotes.length-1;
+      for (let n of notes)
+        if (n.id === filteredNotes[i].id){
+          if (i===0)
+            return true;
+          else i--;
+        }
+      return notes.length === 0 && filteredNotes.length === 0 ? true : false;
+    }
+  }
+  
+  if (notes.length !== countKeeper || !notesChecker()){
+    if (notes.length !== countKeeper)
+      setCountKeeper(notes.length);
     if (!filters.clear)
       handleNotes(filterDate);
     else {
-      const date = { startDate: 0, endDate: new Date().getTime() }
+      const date = { startDate: 0, endDate: notes[0] ? notes[0].createDate: new Date().getTime() }
       setFilterDate(date);
       handleNotes(date);
     } 
@@ -116,7 +141,7 @@ export default function NotesWithFilter() {
     if (!filters.clear)
       handleNotes(filterDate);
     else {
-      const date = { startDate: 0, endDate: new Date().getTime() }
+      const date = { startDate: 0, endDate: notes[0] ? notes[0].createDate : new Date().getTime() }
       setFilterDate(date);
       handleNotes(date, keyWords.length);
     }
